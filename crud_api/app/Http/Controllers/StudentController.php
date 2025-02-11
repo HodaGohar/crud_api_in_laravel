@@ -12,6 +12,7 @@ class StudentController extends Controller
     }
 
     public function store(Request $request ){
+        // return $request;
         $request->validate([
            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:students',
@@ -64,4 +65,30 @@ class StudentController extends Controller
         $student->delete();
         return response()->json(['message => student deleted successfully'], 200);
     }
+
+      public function enroll(Request $request , $student_id){
+        // return $request;
+          $student = Student::find($student_id);
+          if (!$student) {
+            return response()->json(['message'=> 'student not found'],404);
+            }
+          $request->validate([
+            'course_id' => 'required|exists:courses,id'
+          ]);
+          $student->courses()->attach($request->course_id);
+
+
+          return response()->json(['message' => 'Student enrolled successfully'], 201);
+      }
+
+      public function getCourses($student_id)
+      {
+          $student = Student::with('courses')->find($student_id);
+
+          if (!$student) {
+              return response()->json(['message' => 'Student not found'], 404);
+          }
+
+          return response()->json($student->courses, 200);
+      }
 }

@@ -9,4 +9,7 @@ class student extends Model
 {
     use HasFactory;
     protected $fillable = ['name' , 'email' , 'phone' , 'age'];
+    public function courses(){
+        return $this->belongsToMany(Course::class, 'enrollments');
+    }
 }
