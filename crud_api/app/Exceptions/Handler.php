@@ -27,4 +27,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function render($request, Throwable $exception){
+        if($request->is('api/*')){
+            return response()->json([
+                'message'=> $exception->getMessage(),
+                'status'=> 500
+            ], 500);
+        }
+        return parent::render($request, $exception);
+// عشان اخلي اي ايرور حصل داخل api يظهر ع شكل json 
+    }
 }

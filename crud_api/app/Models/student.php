@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class student extends Model
 {
     use HasFactory;
-    protected $fillable = ['name' , 'email' , 'phone' , 'age'];
+    protected $fillable = ['name' , 'email' , 'image' , 'phone' , 'age' ];
     public function courses(){
-        return $this->belongsToMany(Course::class, 'enrollments');
+        return $this->belongsToMany(Course::class, 'enrollments', 'student_id', 'course_id');
     }
 }
