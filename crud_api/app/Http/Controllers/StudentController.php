@@ -10,7 +10,7 @@ class StudentController extends Controller
     public function index()
     {
         try {
-            $students = Student::with('courses')->get()->map(function ($student) {
+            $students = Student::with('course')->get()->map(function ($student) {
                 return [
                     'id' => $student->id,
                     'name' => $student->name,
@@ -119,43 +119,4 @@ class StudentController extends Controller
     }
     }
 
-      public function enroll(Request $request , $student_id){
-        try{
-          $student = Student::find($student_id);
-          if (!$student) {
-            return response()->json(['message'=> 'student not found'],404);
-            }
-          $request->validate([
-            'course_id' => 'required|exists:courses,id'
-          ]);
-          $student->courses()->attach($request->course_id);
-
-
-          return response()->json(['message' => 'Student enrolled successfully'], 201);
-        }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Student not found'], 404);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['error' => 'Validation failed', 'messages' => $e->errors()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to enroll student', 'message' => $e->getMessage()], 500);
-        }
-      }
-
-      public function getCourses($student_id)
-      {
-        try{
-          $student = Student::with('courses')->find($student_id);
-
-          if (!$student) {
-              return response()->json(['message' => 'Student not found'], 404);
-          }
-
-          return response()->json($student->courses, 200);
-      }
-    catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        return response()->json(['error' => 'Student not found'], 404);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to fetch courses', 'message' => $e->getMessage()], 500);
-    }
-}
 }

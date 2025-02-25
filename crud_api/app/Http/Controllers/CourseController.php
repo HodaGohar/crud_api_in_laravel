@@ -13,7 +13,7 @@ class CourseController extends Controller
     public function index()
     {
         try{
-            $courses = Course::with("students")->get()->map(function ($course){
+            $courses = Course::with("student")->get()->map(function ($course){
                 return[
                     'id'=> $course->id,
                      'title'=> $course->title,
