@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,14 +28,23 @@ class Handler extends ExceptionHandler
             //
         });
     }
-    public function render($request, Throwable $exception){
-        if($request->is('api/*')){
+
+public function render($request, Throwable $exception)
+{
+    if ($request->is('api/*')) {
+        if ($exception instanceof ModelNotFoundException) {
             return response()->json([
-                'message'=> $exception->getMessage(),
-                'status'=> 500
-            ], 500);
+                'error' => 'Student Not Found'
+            ], 404);
         }
-        return parent::render($request, $exception);
-// عشان اخلي اي ايرور حصل داخل api يظهر ع شكل json 
+
+        return response()->json([
+            'message' => $exception->getMessage(),
+            'status' => 500
+        ], 500);
     }
+
+    return parent::render($request, $exception);
+}
+
 }
