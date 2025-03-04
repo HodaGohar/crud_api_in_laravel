@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use App\Models\course;
 use App\Traits\HandlesImageUpload;
 
 class StudentController extends Controller

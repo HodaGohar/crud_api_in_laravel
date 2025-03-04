@@ -34,7 +34,7 @@ public function render($request, Throwable $exception)
     if ($request->is('api/*')) {
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
-                'error' => 'Student Not Found'
+                'error' => 'Model Not Found'
             ], 404);
         }
 
